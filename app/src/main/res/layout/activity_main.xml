@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".activities.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/login_form_margin"
+        android:layout_marginRight="@dimen/login_form_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/login_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_divider_10"
+                android:text="@string/login_btn_txt"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/login_big_text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/login_email_field"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_field_height"
+                android:background="@drawable/input_field_decoration"
+                android:fontFamily="sans-serif-condensed-light"
+                android:gravity="center"
+                android:hint="@string/enter_email_hint" />
+
+            <EditText
+                android:id="@+id/login_password_field"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_field_height"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/input_field_decoration"
+                android:fontFamily="sans-serif-condensed-light"
+                android:gravity="center"
+                android:hint="@string/enter_password_hint"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_field_height"
+                android:layout_marginTop="@dimen/login_form_margin"
+                android:background="@drawable/login_button_decoration"
+                android:text="@string/login_btn_txt"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/login_small_text_size" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/very_small_divider_5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/not_registered_msg" />
+
+                <TextView
+                    android:id="@+id/register_now_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/very_small_divider_5"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/register_now_msg"
+                    android:textColor="@color/login_button_background_color" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loading_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible" />
+
+</RelativeLayout>

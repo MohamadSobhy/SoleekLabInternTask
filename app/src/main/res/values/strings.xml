@@ -1,0 +1,47 @@
+<resources>
+
+    <string name="app_name">SoleekLabInternTask</string>
+
+    <string name="activity_registration_label">Register Now</string>
+    <string name="activity_home_label">Countries</string>
+
+    <string name="enter_email_hint">enter email address!</string>
+    <string name="enter_password_hint">enter password</string>
+    <string name="confirm_password_hint">confirm password</string>
+
+    <string name="not_registered_msg">You don\'t have account? </string>
+    <string name="have_account_msg">Have account?</string>
+
+    <string name="register_now_msg">Register now.</string>
+    <string name="login_now_msg">Login now.</string>
+
+    <string name="login_btn_txt">Login</string>
+    <string name="register_btn_txt">Register</string>
+    <string name="login_facebook_btn_txt">Login by Facebook</string>
+    <string name="login_gmail_btn_txt">Login by Gmail</string>
+
+    <string name="invalid_email_or_password_msg">invalid email or password</string>
+    <string name="user_not_found_msg">User not found or wrong data entered</string>
+    <string name="login_successfully_msg">Login successful</string>
+    <string name="registered_successfully">Account created successfully .. opening Login screen...</string>
+    <string name="passwords_not_matched">passwords not matched</string>
+    <string name="registration_failed_msg">Oops there is an error occurred. please try again later</string>
+    <string name="facebook_login_success">Facebook Login success</string>
+    <string name="facebook_login_failed">Facebook Login failed</string>
+    <string name="google_sign_in_success">Logged to Google Successfully</string>
+    <string name="internet_connection_failed">Internet connection failed.</string>
+    <string name="no_data_retrieved_msg">There is no data retrieved from the server</string>
+
+
+    <string name="facebook_app_id">329505024623771</string>
+    <string name="fb_login_protocol_scheme">fb329505024623771</string>
+
+    <string name="google_sign_in_web_client_id">572357958847-fbi8om5u9k83pme345kc8og4sglst3tm.apps.googleusercontent.com</string>
+
+    <string name="default_country_name">Egypt</string>
+    <string name="default_country_capital">Cairo</string>
+    <string name="default_country_region">Africa</string>
+    <string name="default_country_sub_region">North East Africa</string>
+    <string name="default_country_population">has %f million citizen</string>
+
+</resources>

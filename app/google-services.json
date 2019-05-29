@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "572357958847",
+    "firebase_url": "https://soleeklabstask.firebaseio.com",
+    "project_id": "soleeklabstask",
+    "storage_bucket": "soleeklabstask.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572357958847:android:6bdc69d910fe3376",
+        "android_client_info": {
+          "package_name": "com.example.soleeklabinterntask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572357958847-fbi8om5u9k83pme345kc8og4sglst3tm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz10BGMaEyKs9ZkbFe2viREXzWWu0ebfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572357958847-fbi8om5u9k83pme345kc8og4sglst3tm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
