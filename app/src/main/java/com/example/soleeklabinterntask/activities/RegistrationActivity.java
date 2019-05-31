@@ -76,6 +76,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         facebookCallbackManager = CallbackManager.Factory.create();
 
+        //check the current access token
+        checkCurrentLog();
+
         emailField = findViewById(R.id.register_email_field);
         passwordField = findViewById(R.id.register_password_field);
         confirmPasswordField = findViewById(R.id.register_confirm_password_field);
@@ -139,11 +142,11 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 AccessToken token = loginResult.getAccessToken();
 
-                if(token == null){
+                if (token == null) {
 
                     View parentView = findViewById(android.R.id.content);
                     Snackbar.make(parentView, "Login Failed", Snackbar.LENGTH_SHORT).show();
-                }else{
+                } else {
                     handleFacebookAccessToken(token);
                 }
             }
@@ -162,12 +165,18 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+    private void checkCurrentLog() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if (isLoggedIn) {
+            handleFacebookAccessToken(accessToken);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == SIGN_IN_TO_GOOGLE) {
+        if (requestCode == RESULT_OK && requestCode == SIGN_IN_TO_GOOGLE) {
             loadingBar.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             loadingBar.setVisibility(View.INVISIBLE);
@@ -176,7 +185,10 @@ public class RegistrationActivity extends AppCompatActivity {
             Snackbar.make(parentView, getString(R.string.google_sign_in_success), Snackbar.LENGTH_SHORT).show();
 
             openHomeActivity(task.getResult().getDisplayName(), task.getResult().getEmail());
+        } else {
+            facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void signIntoGoogle() {
