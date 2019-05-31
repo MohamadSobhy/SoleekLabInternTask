@@ -37,7 +37,8 @@
                 android:background="@drawable/input_field_decoration"
                 android:fontFamily="sans-serif-condensed-light"
                 android:gravity="center"
-                android:hint="@string/enter_email_hint" />
+                android:hint="@string/enter_email_hint"
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/login_password_field"

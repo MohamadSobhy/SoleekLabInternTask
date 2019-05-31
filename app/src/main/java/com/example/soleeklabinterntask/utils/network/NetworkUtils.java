@@ -4,15 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import com.example.soleeklabinterntask.utils.network.interfaces.CountryApiService;
 import com.example.soleeklabinterntask.utils.network.models.Country;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NetworkUtils {
     private static ArrayList<Country> listOfCountries;
@@ -23,4 +17,5 @@ public class NetworkUtils {
 
         return networkInfo != null && networkInfo.isConnected();
     }
+
 }

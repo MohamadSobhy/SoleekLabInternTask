@@ -5,8 +5,8 @@
     <string name="activity_registration_label">Register Now</string>
     <string name="activity_home_label">Countries</string>
 
-    <string name="enter_email_hint">enter email address!</string>
-    <string name="enter_password_hint">enter password</string>
+    <string name="enter_email_hint">enter a valid email address!</string>
+    <string name="enter_password_hint">enter password more than 5 digits</string>
     <string name="confirm_password_hint">confirm password</string>
 
     <string name="not_registered_msg">You don\'t have account? </string>

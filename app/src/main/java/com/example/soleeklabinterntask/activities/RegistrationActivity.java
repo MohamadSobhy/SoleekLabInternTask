@@ -28,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -113,7 +114,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 String confirmedPassword = confirmPasswordField.getText().toString();
 
                 if (password.equals(confirmedPassword)) {
-                    loadingBar.setVisibility(View.VISIBLE);
                     addNewUser(email, password);
                 } else {
                     View parentView = findViewById(android.R.id.content);
@@ -122,7 +122,12 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        setupLoginbGoogleButton();
 
+        setupLoginbyFacebookButton();
+    }
+
+    private void setupLoginbGoogleButton(){
         SignInButton googleSignInButton = findViewById(R.id.sign_in_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
 
@@ -132,7 +137,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 signIntoGoogle();
             }
         });
-
+    }
+    private void setupLoginbyFacebookButton(){
         LoginButton loginButton = findViewById(R.id.facebook_login_btn);
 
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
@@ -176,15 +182,27 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RESULT_OK && requestCode == SIGN_IN_TO_GOOGLE) {
-            loadingBar.setVisibility(View.VISIBLE);
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            loadingBar.setVisibility(View.INVISIBLE);
+        if (requestCode == SIGN_IN_TO_GOOGLE) {
 
-            View parentView = findViewById(android.R.id.content);
-            Snackbar.make(parentView, getString(R.string.google_sign_in_success), Snackbar.LENGTH_SHORT).show();
+            try {
 
-            openHomeActivity(task.getResult().getDisplayName(), task.getResult().getEmail());
+                loadingBar.setVisibility(View.VISIBLE);
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                loadingBar.setVisibility(View.INVISIBLE);
+
+                View parentView = findViewById(android.R.id.content);
+                Snackbar.make(parentView, getString(R.string.google_sign_in_success), Snackbar.LENGTH_SHORT).show();
+
+                openHomeActivity(account.getDisplayName(), account.getEmail());
+
+            } catch (ApiException e) {
+                loadingBar.setVisibility(View.INVISIBLE);
+                View parentView = findViewById(android.R.id.content);
+                Snackbar.make(parentView, "Error Logging in..", Snackbar.LENGTH_SHORT).show();
+
+            }
+
         } else {
             facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -208,6 +226,8 @@ public class RegistrationActivity extends AppCompatActivity {
             Snackbar.make(parentView, getString(R.string.internet_connection_failed), Snackbar.LENGTH_SHORT).show();
             return;
         }
+
+        loadingBar.setVisibility(View.VISIBLE);
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(

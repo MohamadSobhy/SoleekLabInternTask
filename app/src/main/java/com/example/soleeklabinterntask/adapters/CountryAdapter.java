@@ -1,12 +1,15 @@
 package com.example.soleeklabinterntask.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.soleeklabinterntask.R;
@@ -19,7 +22,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     private List<Country> mCountries;
     private Context mContext;
 
-    public CountryAdapter(Context context, List<Country> countries){
+    public CountryAdapter(Context context, List<Country> countries) {
         mContext = context;
         mCountries = countries;
     }
@@ -34,12 +37,12 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CountryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CountryViewHolder holder, final int position) {
         Country currentCountry = mCountries.get(position);
         holder.nameTextView.setText(currentCountry.getName());
         holder.capitalTextView.setText(currentCountry.getCapital());
         holder.populationTextView.setText(
-                mContext.getString(R.string.default_country_population, (float)(currentCountry.getPopulation() / MILLION))
+                mContext.getString(R.string.default_country_population, (float) (currentCountry.getPopulation() / MILLION))
         );
         holder.regionTextView.setText(currentCountry.getRegion());
         holder.subregionTextView.setText(currentCountry.getSubregion());
@@ -51,6 +54,19 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         holder.populationTextView.setTypeface(fontTypeface);
         holder.regionTextView.setTypeface(fontTypeface);
         holder.subregionTextView.setTypeface(fontTypeface);
+
+        holder.showOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Double> latlng = mCountries.get(position).getLatlng();
+                String countryLocation = "geo:" + latlng.get(0) + "," + latlng.get(1);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(countryLocation));
+                if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                    mContext.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -64,6 +80,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         public TextView regionTextView;
         public TextView subregionTextView;
         public TextView populationTextView;
+        public ImageButton showOnMap;
 
         public CountryViewHolder(@NonNull View parentView) {
             super(parentView);
@@ -72,6 +89,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
             regionTextView = parentView.findViewById(R.id.country_region_tv);
             subregionTextView = parentView.findViewById(R.id.country_sub_region_tv);
             populationTextView = parentView.findViewById(R.id.country_population_tv);
+            showOnMap = parentView.findViewById(R.id.show_on_map_btn);
 
         }
     }

@@ -13,7 +13,7 @@ public class InputsValidatorUtils {
     }
 
     private static boolean validatePasswordInput(String password) {
-        return !password.isEmpty();
+        return !password.isEmpty() && password.length() >= 6;
     }
 
     public static boolean validateInputs(Activity currentActivity, String userEmail, String userPassword) {
