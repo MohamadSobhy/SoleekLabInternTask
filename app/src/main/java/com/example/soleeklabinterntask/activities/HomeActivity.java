@@ -1,5 +1,6 @@
 package com.example.soleeklabinterntask.activities;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Intent currentIntent = getIntent();
+        String userName = currentIntent.getStringExtra(RegistrationActivity.USER_NAME_KEY);
+        String userEmail = currentIntent.getStringExtra(RegistrationActivity.EMAIL_KEY);
+
+        View parentView = findViewById(android.R.id.content);
+        Snackbar.make(parentView, getString(R.string.logged_as, userName, userEmail), Snackbar.LENGTH_LONG).show();
 
         final TextView errorDisplayTextView = findViewById(R.id.error_display_tv);
 

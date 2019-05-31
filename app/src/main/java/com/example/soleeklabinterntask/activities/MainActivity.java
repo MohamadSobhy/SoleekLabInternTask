@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void openUserAccount(String userEmail, String userPassword) {
+    void openUserAccount(final String userEmail, String userPassword) {
 
         final View parentView = findViewById(android.R.id.content);
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     loadingBar.setVisibility(View.INVISIBLE);
                     Snackbar.make(parentView, getString(R.string.login_successfully_msg), Snackbar.LENGTH_SHORT).show();
                     //go to list of countries screen
-                    openHomeActivity();
+                    openHomeActivity(userEmail, userEmail);
                 }else {
                     Snackbar.make(parentView, getString(R.string.user_not_found_msg), Snackbar.LENGTH_SHORT).show();
                     loadingBar.setVisibility(View.INVISIBLE);
@@ -102,8 +102,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void openHomeActivity(){
+    private void openHomeActivity(String userName, String userEmail){
         Intent openHomeScreen = new Intent(MainActivity.this, HomeActivity.class);
+
+        openHomeScreen.putExtra(RegistrationActivity.USER_NAME_KEY, userName);
+        openHomeScreen.putExtra(RegistrationActivity.EMAIL_KEY, userEmail);
+
         startActivity(openHomeScreen);
     }
 

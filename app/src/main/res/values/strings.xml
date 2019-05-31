@@ -32,6 +32,8 @@
     <string name="internet_connection_failed">Internet connection failed.</string>
     <string name="no_data_retrieved_msg">There is no data retrieved from the server</string>
 
+    <string name="logged_as">Logged in as %s with email %s</string>
+
 
     <string name="facebook_app_id">329505024623771</string>
     <string name="fb_login_protocol_scheme">fb329505024623771</string>

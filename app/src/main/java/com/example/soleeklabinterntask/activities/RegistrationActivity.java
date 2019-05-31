@@ -19,6 +19,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,29 +28,32 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class RegistrationActivity extends AppCompatActivity {
     private final int SIGN_IN_TO_GOOGLE = 0;
-    private final String USER_NAME_KEY = "user_name";
-    private final String EMAIL_KEY = "email";
+    private final String FACEBOOK_REQUEST_PARAMETERS_KEY = "fields";
+    private final String FACEBOOK_REQUEST_PARAMETERS_VALUE = "first_name,last_name,email";
+    public static final String USER_NAME_KEY = "user_name";
+    public static final String EMAIL_KEY = "email";
 
     private EditText emailField;
     private EditText passwordField;
     private EditText confirmPasswordField;
     private ProgressBar loadingBar;
 
-    FirebaseAuth firebaseAuth;
-    CallbackManager facebookCallbackManager;
+    private FirebaseAuth firebaseAuth;
+    private CallbackManager facebookCallbackManager;
 
-    GoogleSignInClient googleSignInClient;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,13 +132,20 @@ public class RegistrationActivity extends AppCompatActivity {
 
         LoginButton loginButton = findViewById(R.id.facebook_login_btn);
 
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
 
         loginButton.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                AccessToken token = loginResult.getAccessToken();
 
-                handleFacebookAccessToken(loginResult.getAccessToken());
+                if(token == null){
+
+                    View parentView = findViewById(android.R.id.content);
+                    Snackbar.make(parentView, "Login Failed", Snackbar.LENGTH_SHORT).show();
+                }else{
+                    handleFacebookAccessToken(token);
+                }
             }
 
             @Override
@@ -152,7 +164,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == SIGN_IN_TO_GOOGLE) {
             loadingBar.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -161,9 +175,7 @@ public class RegistrationActivity extends AppCompatActivity {
             View parentView = findViewById(android.R.id.content);
             Snackbar.make(parentView, getString(R.string.google_sign_in_success), Snackbar.LENGTH_SHORT).show();
 
-            openHomeActivity();
-        } else {
-            facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+            openHomeActivity(task.getResult().getDisplayName(), task.getResult().getEmail());
         }
     }
 
@@ -204,28 +216,37 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void openHomeActivity() {
+    private void openHomeActivity(String userName, String userEmail) {
         Intent openHomeScreen = new Intent(RegistrationActivity.this, HomeActivity.class);
+
+        openHomeScreen.putExtra(USER_NAME_KEY, userName);
+        openHomeScreen.putExtra(EMAIL_KEY, userEmail);
+
         startActivity(openHomeScreen);
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            View parentView = findViewById(android.R.id.content);
-                            Snackbar.make(parentView, getString(R.string.facebook_login_success), Snackbar.LENGTH_SHORT).show();
-                            openHomeActivity();
-                        } else {
-                            View parentView = findViewById(android.R.id.content);
-                            Snackbar.make(parentView, "Facebook Login failed", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                try {
+                    //extracting data from JsonObject and sending them to Home screen with the intent
+                    String firstName = object.getString("first_name");
+                    String lastName = object.getString("last_name");
+                    String email = object.getString("email");
+
+                    openHomeActivity((firstName + " " + lastName), email);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Bundle requestParameters = new Bundle();
+        requestParameters.putString(FACEBOOK_REQUEST_PARAMETERS_KEY, FACEBOOK_REQUEST_PARAMETERS_VALUE);
+        request.setParameters(requestParameters);
+        request.executeAsync();
     }
 
     @Override
